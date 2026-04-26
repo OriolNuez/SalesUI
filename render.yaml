@@ -1,0 +1,33 @@
+# Render.com Blueprint Configuration
+# This file defines all services needed for the Sales UI application
+
+services:
+  # Backend API Service
+  - type: web
+    name: sales-ui-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && node index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+    healthCheckPath: /api/health
+
+  # Frontend Static Site
+  - type: web
+    name: sales-ui-frontend
+    env: static
+    region: oregon
+    plan: free
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: ./client/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+# Made with Bob

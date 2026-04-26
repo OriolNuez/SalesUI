@@ -1,0 +1,14 @@
+{
+  "name": "seller-tracker",
+  "version": "1.0.0",
+  "description": "Personal seller tracker with CRM, daily planner, and business objectives",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "client": "cd client && npm run dev",
+    "server": "cd server && node index.js",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
