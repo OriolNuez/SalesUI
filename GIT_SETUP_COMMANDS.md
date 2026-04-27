@@ -15,11 +15,10 @@ cd /Users/oriolnuez/Desktop/UI_Sales
 git remote remove origin
 
 # Add the correct remote (your actual GitHub repo)
-git remote add origin https://github.com/OriolNuez/sales-ui.git
+git remote add origin https://github.com/OriolNuez/SalesUI.git
 
 # Verify the remote is correct
 git remote -v
-
 # Check if you have uncommitted changes
 git status
 

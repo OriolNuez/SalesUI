@@ -52,7 +52,7 @@ git add .
 git commit -m "Production-ready: Bug fixes, optimizations, and Render config"
 
 # Create GitHub repo at github.com, then:
-git remote add origin https://github.com/YOUR_USERNAME/sales-ui.git
+git remote add origin https://github.com/OriolNuez/SalesUI.git
 git branch -M main
 git push -u origin main
 ```
@@ -88,7 +88,7 @@ git push -u origin main
    - **Plan:** Free
 4. Add Environment Variables:
    ```
-   NODE_ENV=production
+   NODE_ENV=P
    PORT=3001
    DATABASE_URL=[paste your database internal URL]
    FRONTEND_URL=https://sales-ui-frontend.onrender.com

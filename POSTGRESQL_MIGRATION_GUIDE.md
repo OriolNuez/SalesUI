@@ -44,7 +44,7 @@ This guide will help you migrate your Sales UI application from JSON file storag
 2. **Click "Connect" → "External Connection"**
 3. **Copy the PSQL Command** (looks like):
    ```
-   PGPASSWORD=xxx psql -h dpg-xxx.oregon-postgres.render.com -U sales_ui_db_user sales_ui_db
+   PGPASSWORD=xxx psql -h dpg-SW0UifNvGAFt82hGpVdUFWMOjPmboKvx psql -h dpg-xxx.oregon-postgres.render.com -U sales_ui_db_user sales_ui_db.oregon-postgres.render.com -U sales_ui_db_user sales_ui_db
    ```
 
 4. **Open your terminal and run the PSQL command**

@@ -17,7 +17,7 @@
 Run this command in your terminal (replace with your actual connection string):
 
 ```bash
-psql "postgresql://username:password@dpg-d7n8nu57vvec7390aglg-a.oregon-postgres.render.com/database_name"
+psql "postgresql://oriol:SW0UifNvGAFt82hGpVdUFWMOjPmboKvx@dpg-d7n8nu57vvec7390aglg-a.frankfurt-postgres.render.com/sales_ui"
 ```
 
 **Note**: Make sure you have PostgreSQL installed on your Mac. If not, install it first:
