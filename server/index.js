@@ -14,8 +14,24 @@ if (!fs.existsSync(dataDir)) {
 }
 
 // CORS configuration for production
+// When credentials is true, origin cannot be '*', so we use a function
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || '*',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // If FRONTEND_URL is set, only allow that origin
+    if (process.env.FRONTEND_URL) {
+      if (origin === process.env.FRONTEND_URL) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    } else {
+      // If no FRONTEND_URL is set, allow all origins
+      callback(null, true);
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
