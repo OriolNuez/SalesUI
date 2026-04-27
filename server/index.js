@@ -25,7 +25,10 @@ const corsOptions = {
       if (origin === process.env.FRONTEND_URL) {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        // Don't throw error - just reject the origin but allow the request to continue
+        // This prevents CORS errors from masking real errors
+        console.warn(`CORS: Rejected origin ${origin} (expected ${process.env.FRONTEND_URL})`);
+        callback(null, false);
       }
     } else {
       // If no FRONTEND_URL is set, allow all origins
@@ -34,7 +37,7 @@ const corsOptions = {
   },
   credentials: true,
   optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   exposedHeaders: ['Content-Range', 'X-Content-Range']
 };
@@ -42,6 +45,12 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 app.use(express.json());
+
+// Request logging middleware to help debug issues
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
+  next();
+});
 
 // Routes
 app.use('/api/daily', require('./routes/daily'));
@@ -60,8 +69,33 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Error handling middleware - MUST be after all routes
+// This catches any errors and ensures proper error responses with CORS headers
+app.use((err, req, res, next) => {
+  console.error('Error occurred:', err);
+  
+  // Set CORS headers manually for error responses
+  const origin = req.headers.origin;
+  if (origin && (!process.env.FRONTEND_URL || origin === process.env.FRONTEND_URL)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+  }
+  
+  // Send error response
+  res.status(err.status || 500).json({
+    error: err.message || 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
+// 404 handler for undefined routes
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
 app.listen(PORT, () => {
   console.log(`Seller Tracker API running on http://localhost:${PORT}`);
+  console.log(`CORS: ${process.env.FRONTEND_URL ? `Restricted to ${process.env.FRONTEND_URL}` : 'Allowing all origins'}`);
 });
 
 // Made with Bob
